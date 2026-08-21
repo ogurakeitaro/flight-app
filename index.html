@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h1>🚁 飛行時間管理</h1>
+
+<p>離陸日時</p>
+<input type="datetime-local" id="dep">
+
+<p>着陸日時</p>
+<input type="datetime-local" id="arr">
+
+<br><br>
+
+<button onclick="saveFlight()">
+登録
+</button>
+
+<button onclick="clearFlights()">
+全削除
+</button>
+
+<h2>24時間累計</h2>
+
+ 
+<div id="total24">
+ 
+
+0時間0分
+
+
+</div>
+
+<h2>希望飛行時間</h2>
+
+時間
+<input type="number"
+       id="reqHours"
+       value="1"
+       min="0"
+       max="8"
+       onchange="calculateEarliest()">
+
+分
+<input type="number"
+       id="reqMinutes"
+       value="30"
+       min="0"
+       max="59"
+       onchange="calculateEarliest()">
+
+<br><br>
+
+<button onclick="calculateEarliest()">
+飛行可能時刻を計算
+</button>
+
+<h2>飛行可能時刻</h2>
+
+<div id="earliest">
+未計算
+</div>
+
+<h2>あと飛べる時間</h2>
+
+<div id="remaining">
+
+8時間0分
+
+</div>
+
+<h2>登録済みフライト</h2>
+
+<ul id="flightList">
+</ul>
+<script>
+
+let flights =
+    JSON.parse(
+        localStorage.getItem("flights")
+    ) || [];
+
+displayFlights();
+calculate24Hours();
+calculateRemaining();
+calculateEarliest();
+
+function saveFlight() {
+
+    let dep =
+        document.getElementById("dep").value;
+
+    let arr =
+        document.getElementById("arr").value;
+
+    if (!dep || !arr) {
+        alert("日時を入力してください");
+        return;
+    }
+
+    flights.push({
+        dep: dep,
+        arr: arr
+    });
+
+    localStorage.setItem(
+        "flights",
+        JSON.stringify(flights)
+    );
+
+    displayFlights();
+    calculate24Hours();
+    calculateRemaining();
+    calculateEarliest();
+
+}
+
+function displayFlights() {
+
+    let list =
+        document.getElementById("flightList");
+
+    list.innerHTML = "";
+
+    flights.forEach((flight,index) => {
+
+        let item =
+            document.createElement("li");
+
+        item.innerHTML =
+            flight.dep +
+            " → " +
+            flight.arr +
+            ' <button onclick="deleteFlight(' +
+            index +
+            ')">削除</button>';
+
+        list.appendChild(item);
+
+    });
+
+}
+
+function calculate24Hours() {
+
+    let now = new Date();
+
+    let start24 =
+        new Date(
+            now.getTime() -
+            24 * 60 * 60 * 1000
+        );
+
+    let totalHours = 0;
+
+    flights.forEach(flight => {
+
+        let dep =
+            new Date(flight.dep);
+
+        let arr =
+            new Date(flight.arr);
+
+        if (
+            arr > start24 &&
+            dep < now
+        ) {
+
+            let overlapStart =
+                new Date(
+                    Math.max(dep, start24)
+                );
+
+            let overlapEnd =
+                new Date(
+                    Math.min(arr, now)
+                );
+
+            totalHours +=
+                (overlapEnd - overlapStart)
+                / 3600000;
+
+        }
+
+    });
+
+    let totalMinutes =
+    Math.round(totalHours * 60);
+
+let hours =
+    Math.floor(totalMinutes / 60);
+
+let mins =
+    totalMinutes % 60;
+
+    document.getElementById("total24")
+        .innerHTML =
+        hours + "時間" +
+        mins + "分";
+
+}
+
+function calculateRemaining() {
+
+    let now = new Date();
+
+    let start24 =
+        new Date(
+            now.getTime() -
+            24 * 60 * 60 * 1000
+        );
+
+    let totalHours = 0;
+
+    flights.forEach(flight => {
+
+        let dep =
+            new Date(flight.dep);
+
+        let arr =
+            new Date(flight.arr);
+
+        if (
+            arr > start24 &&
+            dep < now
+        ) {
+
+            let overlapStart =
+                new Date(
+                    Math.max(dep, start24)
+                );
+
+            let overlapEnd =
+                new Date(
+                    Math.min(arr, now)
+                );
+
+            totalHours +=
+                (overlapEnd - overlapStart)
+                / 3600000;
+
+        }
+
+    });
+
+    let remaining =
+        Math.max(0, 8 - totalHours);
+
+    let totalMinutes =
+        Math.round(remaining * 60);
+
+    let hours =
+        Math.floor(totalMinutes / 60);
+
+    let mins =
+        totalMinutes % 60;
+
+    document.getElementById("remaining")
+        .innerHTML =
+        hours + "時間" +
+        mins + "分";
+
+}
+
+
+function clearFlights() {
+
+    if(confirm("全て削除しますか？")) {
+
+        flights = [];
+
+        localStorage.removeItem("flights");
+
+        displayFlights();
+        calculate24Hours();
+        calculateRemaining();
+        calculateEarliest();
+    }
+
+}
+
+function deleteFlight(index) {
+
+    flights.splice(index,1);
+
+    localStorage.setItem(
+        "flights",
+        JSON.stringify(flights)
+    );
+
+    displayFlights();
+    calculate24Hours();
+    calculateRemaining();
+    calculateEarliest();
+
+}
+
+function calculateHoursAtTime(checkTime) {
+
+    let start24 =
+        new Date(
+            checkTime.getTime()
+            - 24 * 60 * 60 * 1000
+        );
+
+    let totalHours = 0;
+
+    flights.forEach(flight => {
+
+        let dep =
+            new Date(flight.dep);
+
+        let arr =
+            new Date(flight.arr);
+
+        if (
+            arr > start24 &&
+            dep < checkTime
+        ) {
+
+            let overlapStart =
+                new Date(
+                    Math.max(dep,start24)
+                );
+
+            let overlapEnd =
+                new Date(
+                    Math.min(arr,checkTime)
+                );
+
+            totalHours +=
+                (overlapEnd - overlapStart)
+                / 3600000;
+        }
+
+    });
+
+    return totalHours;
+}
+
+function calculateEarliest() {
+
+    let reqHours =
+        Number(
+            document.getElementById("reqHours").value
+        );
+
+    let reqMinutes =
+        Number(
+            document.getElementById("reqMinutes").value
+        );
+
+    let requestTime =
+        reqHours +
+        (reqMinutes / 60);
+
+    let t =
+        new Date();
+
+    while (
+        calculateHoursAtTime(t)
+        + requestTime > 8
+    ) {
+
+        t =
+            new Date(
+                t.getTime()
+                + 60000
+            );
+    }
+
+   let hh =
+    String(t.getHours())
+        .padStart(2,"0");
+
+let mm =
+    String(t.getMinutes())
+        .padStart(2,"0");
+
+document.getElementById("earliest")
+    .innerHTML =
+    hh + ":" + mm + "から飛行可能"; 
+
+}
+
+</script>
+
+
+</body>
+
+</html>
