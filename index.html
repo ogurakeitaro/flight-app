@@ -100,7 +100,7 @@ function saveFlight() {
         return;
     }
 
-　　if (new Date(dep) >= new Date(arr)) {
+　 if (new Date(dep) >= new Date(arr)) {
 
     alert("着陸日時は離陸日時より後にしてください");
 
@@ -365,19 +365,32 @@ function calculateEarliest() {
         (reqMinutes / 60);
 
     let t =
-        new Date();
+    new Date();
 
-    while (
-        calculateHoursAtTime(t)
-        + requestTime > 8
-    ) {
+let count = 0;
 
-        t =
-            new Date(
-                t.getTime()
-                + 60000
-            );
+while (
+    calculateHoursAtTime(t)
+    + requestTime > 8
+) {
+
+    t =
+        new Date(
+            t.getTime()
+            + 60000
+        );
+
+    count++;
+
+    if (count > 100000) {
+
+        alert("計算上限に達しました");
+
+        return;
+
     }
+
+}
 
    let hh =
     String(t.getHours())
