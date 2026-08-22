@@ -58,38 +58,6 @@
 <span id="now"></span>
 </div>
 
-<div id="flightSection">
-
-<h2>並び順</h2>
-
-<select id="sortOrder" onchange="displayFlights()">
-    <option value="new">新しい順</option>
-    <option value="old" selected>古い順</option>
-</select>
-
-<h2>登録済みフライト</h2>
-
-<ul id="flightList">
-</ul>
-
-</div>    
-       
-<p>離陸日時</p>
-<input type="datetime-local" id="dep">
-
-<p>着陸日時</p>
-<input type="datetime-local" id="arr">
-
-<br><br>
-
-<button onclick="saveFlight()">
-登録
-</button>
-
-<button onclick="clearFlights()">
-全削除
-</button>
-
 <div id="topPanel">  
     
 <div>
@@ -149,6 +117,38 @@
 <div id="remaining">
 8時間0分
 </div>
+    
+<div id="flightSection">
+
+<h2>並び順</h2>
+
+<select id="sortOrder" onchange="displayFlights()">
+    <option value="new">新しい順</option>
+    <option value="old" selected>古い順</option>
+</select>
+
+<h2>登録済みフライト</h2>
+
+<ul id="flightList">
+</ul>
+
+</div>    
+       
+<p>離陸日時</p>
+<input type="datetime-local" id="dep">
+
+<p>着陸日時</p>
+<input type="datetime-local" id="arr">
+
+<br><br>
+
+<button onclick="saveFlight()">
+登録
+</button>
+
+<button onclick="clearFlights()">
+全削除
+</button>
 
 </div>
 
