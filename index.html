@@ -71,6 +71,13 @@
 
 </div>
 
+<h2>並び順</h2>
+
+<select id="sortOrder" onchange="displayFlights()">
+    <option value="new">新しい順</option>
+    <option value="old">古い順</option>
+</select>
+       
 <h2>登録済みフライト</h2>
 
 <ul id="flightList">
@@ -127,6 +134,23 @@ function saveFlight() {
 
 function displayFlights() {
 
+let sortOrder =
+    document.getElementById("sortOrder").value;
+
+if (sortOrder === "old") {
+
+    flights.sort((a,b) => {
+        return new Date(a.dep) - new Date(b.dep);
+    });
+
+} else {
+
+    flights.sort((a,b) => {
+        return new Date(b.dep) - new Date(a.dep);
+    });
+
+}
+       
     let list =
         document.getElementById("flightList");
 
