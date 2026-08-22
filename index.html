@@ -480,11 +480,16 @@ function updateTime() {
         .innerHTML =
         now.toLocaleString();
 
+    calculate24Hours();
+    calculateRemaining();
+    calculateEarliest();
+
 }
 
 updateTime();
 
 setInterval(updateTime,1000);
+
 
        
 </script>
