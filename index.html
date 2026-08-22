@@ -457,6 +457,21 @@ document.getElementById("earliest")
 
 }
 
+function updateTime() {
+
+    let now = new Date();
+
+    document.getElementById("now")
+        .innerHTML =
+        now.toLocaleString();
+
+}
+
+updateTime();
+
+setInterval(updateTime,1000);
+
+       
 </script>
 
 
