@@ -60,6 +60,13 @@
 
 <div id="flightSection">
 
+<h2>並び順</h2>
+
+<select id="sortOrder" onchange="displayFlights()">
+    <option value="new">新しい順</option>
+    <option value="old" selected>古い順</option>
+</select>
+
 <h2>登録済みフライト</h2>
 
 <ul id="flightList">
@@ -146,13 +153,6 @@
 </div>
 
 </div>    
-
-<h2>並び順</h2>
-
-<select id="sortOrder" onchange="displayFlights()">
-    <option value="new">新しい順</option>
-    <option value="old" selected>古い順</option>
-</select>
 
 <script>
 
