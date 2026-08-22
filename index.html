@@ -4,6 +4,16 @@
 
 <body>
 
+<style>
+
+#currentTime {
+
+    text-align: right;
+
+}
+
+</style>     
+       
 <h1>🚁 飛行時間管理</h1>
 
 <div id="currentTime">
@@ -141,10 +151,15 @@ function saveFlight() {
 
 function displayFlights() {
 
-let sortOrder =
-    document.getElementById("sortOrder").value;
+    let sortElement =
+        document.getElementById("sortOrder");
 
-if (sortOrder === "old") {
+    let sortOrder =
+        sortElement ?
+        sortElement.value :
+        "new";
+
+    if (sortOrder === "old") {
 
     flights.sort((a,b) => {
         return new Date(a.dep) - new Date(b.dep);
@@ -476,5 +491,6 @@ setInterval(updateTime,1000);
 
 
 </body>
+
 
 </html>
