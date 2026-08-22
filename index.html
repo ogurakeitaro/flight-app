@@ -137,13 +137,33 @@ function displayFlights() {
         let item =
             document.createElement("li");
 
-        item.innerHTML =
-            flight.dep +
-            " → " +
-            flight.arr +
-            ' <button onclick="deleteFlight(' +
-            index +
-            ')">削除</button>';
+        let depDate = new Date(flight.dep);
+
+let arrDate = new Date(flight.arr);
+
+let flightMinutes =
+    Math.round(
+        (arrDate - depDate) / 60000
+    );
+
+let flightHours =
+    Math.floor(flightMinutes / 60);
+
+let flightMins =
+    flightMinutes % 60;
+
+item.innerHTML =
+    depDate.toLocaleString() +
+    " → " +
+    arrDate.toLocaleString() +
+    "<br>飛行時間 " +
+    flightHours +
+    "時間" +
+    flightMins +
+    "分 " +
+    ' <button onclick="deleteFlight(' +
+    index +
+    ')">削除</button>';
 
         list.appendChild(item);
 
