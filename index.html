@@ -159,10 +159,6 @@
 <button onclick="clearFlights()">
 全削除
 </button>
-
-<button onclick="location.reload()">
-更新
-</button>
     
 </div>
 
@@ -192,7 +188,7 @@ function saveFlight() {
         return;
     }
 
-　 if (new Date(dep) >= new Date(arr)) {
+ if (new Date(dep) >= new Date(arr)) {
 
     alert("着陸日時は離陸日時より後にしてください");
 
